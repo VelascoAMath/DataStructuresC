@@ -3,65 +3,71 @@
 #include "LinkedList.h"
 
 
+struct LinkedList * LinkedListInit(){
+	struct LinkedList * list = malloc(sizeof(struct LinkedList));
+	list->head = NULL;
+	list->length = 0;
+	return list;
+}
+
 /*
  Returns the first item
 */
- int getFirst(){
- 	return head->item;
+ int getFirst(struct LinkedList * list){
+ 	return list->head->item;
  }
 
- int * toArray(){
- 	int * result = (int*) malloc(sizeof(int) * length);
- 	if(length == 0)
+ int * toArray(struct LinkedList * list){
+ 	int * result = (int*) malloc(sizeof(int) * list->length);
+ 	if(list->length == 0)
  		return result;
- 	result[0] = head->item;
- 	struct	Node * temp = head;
- 	for(int i = 1; i < length; i++){
+ 	result[0] = list->head->item;
+ 	struct	Node * temp = list->head;
+ 	for(int i = 1; i < list->length; i++){
  		temp = temp -> next;
  		result[i] = temp -> item;
  	}
  	return result;
  }
 
- int len(){
- 	return length;
+ int len(struct LinkedList * list){
+ 	return list->length;
  }
- void addFirst(int newItem){
- 	if(length == 0){
- 		head = (struct Node*) malloc(sizeof(struct Node));
- 		head->item = newItem;
- 		head->next = NULL;
+ void addFirst(struct LinkedList * list, int newItem){
+ 	if(list->length == 0){
+ 		list->head = (struct Node*) malloc(sizeof(struct Node));
+ 		list->head->item = newItem;
+ 		list->head->next = NULL;
  	} else {
  		struct	Node * newNode = (struct Node *) malloc(sizeof(struct Node));
  		newNode -> item = newItem;
- 		newNode -> next = head;
- 		head = newNode;
+ 		newNode -> next = list->head;
+ 		list->head = newNode;
  	}
- 	length++;
+ 	list->length++;
  }
 
 
- void removeFirst(){
- 	if(length > 0){
- 		if(length == 1){
- 			free(head);
- 			length = 0;
+ void removeFirst(struct LinkedList * list){
+ 	if(list->length > 0){
+ 		if(list->length == 1){
+ 			free(list->head);
+ 			list->length = 0;
  		} else {
- 			struct	Node * temp = head;
- 			head = head -> next;
- 			temp -> next = NULL;
+ 			struct	Node * temp = list->head;
+ 			list->head = (list->head)-> next;
  			free(temp);
- 			length--;
+ 			list->length--;
  		}
  	}
 
  }
 
- void removeLast(){
- 	if(length == 1){
- 		free(head);
+ void removeLast(struct LinkedList * list){
+ 	if(list->length == 1){
+ 		free(list->head);
  	} else{
- 		struct Node* temp = head;
+ 		struct Node* temp = list->head;
  		while(temp -> next -> next != NULL){
  			temp = temp -> next;
  		}
@@ -70,39 +76,39 @@
  		free(temp);
  		prevTemp -> next = NULL;
  	}
- 	length--;
+ 	list->length--;
  }
 
 
- void removeItem(int index){
+ void removeItem(struct LinkedList * list, int index){
  	if(index == 0){
- 		removeFirst();
- 	} else if(index == length - 1){
- 		removeLast();
+ 		removeFirst(list);
+ 	} else if(index == list->length - 1){
+ 		removeLast(list);
  	} else {
- 		struct	Node * temp = head;
+ 		struct	Node * temp = list->head;
  		for(int i = 1; i < index; i++){
  			temp = temp -> next;
  		}
  		struct	Node * removedTemp = temp -> next;
  		temp -> next = removedTemp -> next;
  		free(removedTemp);
- 		length--;
+ 		list->length--;
  	}
  }
 
- void clear(){
- 	while(length > 0){
- 		removeFirst();
+ void clear(struct LinkedList * list){
+ 	while(list->length > 0){
+ 		removeFirst(list);
  	}
  }
- void addLast(int newItem){
- 	if(length == 0){
- 		head = (struct Node*) malloc(sizeof(struct Node));
- 		head->item = newItem;
- 		head->next = NULL;
+ void addLast(struct LinkedList * list, int newItem){
+ 	if(list->length == 0){
+ 		list->head = (struct Node*) malloc(sizeof(struct Node));
+ 		list->head->item = newItem;
+ 		list->head->next = NULL;
  	} else{
- 		struct Node* temp = head;
+ 		struct Node* temp = list->head;
  		while(temp -> next != NULL){
  			temp = temp -> next;
  		}
@@ -111,45 +117,49 @@
  		newNode -> item = newItem;
  		newNode -> next = NULL;
  	}
- 	length++;
+ 	list->length++;
  }
 
 
- void addItem(int index, int newItem){
+ void addItem(struct LinkedList * list, int index, int newItem){
  	if(index == 0){
- 		addFirst(newItem);
- 	} else if(index == length){
- 		addLast(newItem);
- 	} else if (index <= length){
- 		struct	Node * temp = head;
- 		for(int i = 1; i <= index; i++){
+ 		addFirst(list, newItem);
+ 	} else if(index == list->length){
+ 		addLast(list, newItem);
+ 	} else if (index < list->length){
+ 		struct	Node * temp = list->head;
+ 		for(int i = 1; i < index; i++){
  			temp = temp -> next;
  		}
  		struct	Node * newNode = (struct Node *) malloc(sizeof(struct Node));
  		newNode -> item = newItem;
  		newNode -> next = temp -> next;
  		temp -> next = newNode;
- 		length++;
+ 		list->length++;
 
  	}
  }
 
  int main(int argc, char ** argv){
+ 	struct LinkedList * list = LinkedListInit();
  	if(argc > 1){
- 		for(int i = 1; i < argc; i++){
+ 		for(int i = argc - 1; i > 0; i--){
  			int item = atoi(argv[i]);
- 			addLast(item);
+ 			addFirst(list, item);
  		}
  	}
  	else{
- 		for(int i = 2; i < 100000; i++){
- 			addFirst(i);
+ 		for(int i = 0; i < 1000; i++){
+ 			addFirst(list, i);
  		}
  	}
- 	int * a = toArray();
- 	for(int i = 0; i < len(); i++){
+ 	int * a = toArray(list);
+ 	for(int i = 0; i < len(list); i++){
  		printf("%d ", a[i]);
  	}
  	printf("\n");
+ 	clear(list);
+ 	free(list);
+ 	free(a);
  	return 0;
  }

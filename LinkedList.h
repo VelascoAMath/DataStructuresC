@@ -9,58 +9,67 @@ struct Node{
 	int item;
 	struct	Node* next;
 };
-struct Node * head;
 
+struct LinkedList
+{
+	struct Node * head;
+	int length;
+};
+
+/*
+Returns a pointer to a new LinkedList
+*/
+struct LinkedList * LinkedListInit();
 /*
 Returns the first item in the list
 */
-int getFirst();
+int getFirst(struct LinkedList * list);
 
 /*
 Returns a pointer to an array representation of the list
 */
-int * toArray();
+int * toArray(struct LinkedList * list);
 
 /*
 Returns the number of items in the list
 */
-int len();
+int len(struct LinkedList * list);
 
 /*
 Adds newItem to the beginning of the list
 */
-void addFirst(int newItem);
+void addFirst(struct LinkedList * list, int newItem);
 
 /*
 Removes the first item in the list
 */
-void removeFirst();
+void removeFirst(struct LinkedList * list);
 
 /*
 Removes the last item in the list
 */
-void removeLast();
+void removeLast(struct LinkedList * list);
 
 /*
 Removes the item in the indexth position in the list.
 */
-void removeItem(int index);
+void removeItem(struct LinkedList * list, int index);
 
 /*
 Removes all items in the list
 */
-void clear();
+void clear(struct LinkedList * list);
 
 /*
 Appends the newItem to the end of the list
 */
-void addLast(int newItem);
+void addLast(struct LinkedList * list, int newItem);
 
 
 /*
 Adds the newItem in the specified index
 */
-void addItem(int index, int newItem);
+void addItem(struct LinkedList * list, int index, int newItem);
 
 
 #endif
